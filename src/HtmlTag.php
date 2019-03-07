@@ -33,7 +33,7 @@ class HtmlTag implements Renderable
      * @param array $tag
      */
     protected $selfClosingTags = [
-        'img', 'br', 'link', 'meta'
+        'img', 'input', 'br', 'hr', 'link', 'meta', 'area', 'base', 'col', 'embed', 'param', 'source', 'track', 'wbr'
     ];
 
     /**
