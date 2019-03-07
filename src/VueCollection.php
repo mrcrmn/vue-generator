@@ -54,7 +54,7 @@ class VueCollection implements Renderable, \ArrayAccess, \Countable, \Iterator
 
         array_walk($vue, function($item) {
             $this->guard($item);
-            
+
             $this->items[] = $item;
         });
 

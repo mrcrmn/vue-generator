@@ -39,4 +39,41 @@ class VueCollectionTest extends TestCase
 
         $this->assertEquals("<v-slider v-bind:autoplay='true'><v-slider-item src='image1.jpg'></v-slider-item><v-slider-item src='image2.jpg'></v-slider-item></v-slider>", $outer->render());
     }
+
+    public function test_it_can_be_counted()
+    {
+        $collection  = new VueCollection();
+        $this->assertCount(0, $collection);
+
+        $collection->add(Vue::make('v-link'));
+        $this->assertCount(1, $collection);
+    }
+
+    public function test_it_can_be_array_accessed()
+    {
+        $collection  = new VueCollection([
+            Vue::make('v-link'),
+            Vue::make('v-image')
+        ]);
+
+        $this->assertEquals('<v-link></v-link>', $collection[0]->render());
+        $this->assertEquals('<v-image></v-image>', $collection[1]->render());
+    }
+
+    public function test_it_can_be_iterated()
+    {
+        $collection  = new VueCollection([
+            Vue::make('v-link'),
+            Vue::make('v-image')
+        ]);
+
+        $output = '';
+
+        foreach ($collection as $item)
+        {
+            $output .= $item->render();
+        }
+
+        $this->assertEquals('<v-link></v-link><v-image></v-image>', $output);
+    }
 }
