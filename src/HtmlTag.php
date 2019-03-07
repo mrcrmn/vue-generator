@@ -2,7 +2,9 @@
 
 namespace mrcrmn\VueGenerator;
 
-class HtmlTag
+use mrcrmn\VueGenerator\Renderable;
+
+class HtmlTag implements Renderable
 {
     /**
      * The name of the Html Tag.
@@ -216,10 +218,16 @@ class HtmlTag
     /**
      * Getter for the slot.
      *
+     * If the slot is an instance of Renderable, the rendered output will be returned.
+     * 
      * @return string
      */
     public function getSlot()
     {
+        if ($this->slot instanceof Renderable) {
+            return $this->slot->render();
+        }
+
         return $this->slot;
     }
 }

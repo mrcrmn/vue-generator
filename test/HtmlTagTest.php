@@ -99,4 +99,13 @@ class HtmlTagTest extends TestCase
 
         $this->assertEquals('<h1 class="bold">Hallo Welt</h1>', $html->render());
     }
+
+    public function test_it_can_render_a_renderable_slot()
+    {
+        $html = HtmlTag::make('h1')->setSlot(
+            HtmlTag::make('span')->setSlot('inner text')
+        );
+    
+        $this->assertEquals('<h1><span>inner text</span></h1>', $html->render());
+    }
 }

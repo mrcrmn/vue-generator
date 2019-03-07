@@ -66,4 +66,14 @@ class VueTest extends TestCase
 
         $this->assertEquals("<v-outer><v-inner v-bind:inside='true'></v-inner></v-outer>", $vue->render());
     }
+
+    public function test_slots_will_be_rendered_when_only_a_renderable_object_is_passed()
+    {
+        $vue = new Vue('v-outer');
+        $vue2 = new Vue('v-inner');
+        $vue2->setProp('inside', true);
+        $vue->setSlot($vue2);
+
+        $this->assertEquals("<v-outer><v-inner v-bind:inside='true'></v-inner></v-outer>", $vue->render());
+    }
 }

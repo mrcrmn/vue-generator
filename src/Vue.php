@@ -3,8 +3,9 @@
 namespace mrcrmn\VueGenerator;
 
 use mrcrmn\VueGenerator\HtmlTag;
+use mrcrmn\VueGenerator\Renderable;
 
-class Vue extends HtmlTag
+class Vue extends HtmlTag implements Renderable
 {
     /**
      * Alias for setting an attribute.
@@ -31,6 +32,8 @@ class Vue extends HtmlTag
 
     /**
      * Checks if we need to add 'v-bind:' before the prop declaration.
+     * 
+     * This only applies to string.
      *
      * @param mixed $value
      * @return boolean
