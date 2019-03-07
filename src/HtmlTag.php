@@ -187,16 +187,16 @@ class HtmlTag implements Renderable
      */
     public function setAttribute($attribute, $value = null, $boolean = true)
     {
-        if (is_array($attribute)) {
-            foreach ($attribute as $attributeKey => $attributeValue) {
-                $this->setAttribute($attributeKey, $attributeValue, is_bool($value) ? $value : true);
-            }
-
-            return $this;
+        if (! is_array($attribute)) {
+            $attribute = [$attribute => $value];
+        } else {
+            $boolean = is_bool($value) ? $value : true;
         }
 
         if ($boolean) {
-            $this->attributes[$attribute] = $value;
+            array_walk($attribute, function($value, $key) {
+                $this->attributes[$key] = $value;
+            });
         }
 
         return $this;
