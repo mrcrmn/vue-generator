@@ -14,7 +14,7 @@ class Vue extends HtmlTag
      * @param boolean $boolean
      * @return $this
      */
-    public function addProp($prop, $value, $boolean = true)
+    public function setProp($prop, $value = null, $boolean = true)
     {
         return $this->setAttribute($prop, $value, $boolean);
     }
