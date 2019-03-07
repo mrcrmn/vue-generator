@@ -4,9 +4,13 @@ namespace mrcrmn\VueGenerator;
 
 use mrcrmn\VueGenerator\Vue;
 use mrcrmn\VueGenerator\Renderable;
+use mrcrmn\VueGenerator\Traits\CanBeIterated;
+use mrcrmn\VueGenerator\Traits\ArrayAccessable;
 
-class VueCollection implements Renderable
+class VueCollection implements Renderable, \ArrayAccess, \Countable, \Iterator
 {
+    use ArrayAccessable, CanBeIterated;
+
     /**
      * The Vue objects in this collection.
      *
@@ -25,6 +29,19 @@ class VueCollection implements Renderable
     }
 
     /**
+     * Throws an exception if the given item doesn't implement the Renderable interface.
+     *
+     * @param mixed $item
+     * @return void
+     */
+    protected function guard($item)
+    {
+        if (! $item instanceof Renderable) {
+            throw new \InvalidArgumentException("This item cannot be added to this collection. Make sure it implements the Renderable Interface.");
+        }
+    }
+
+    /**
      * Adds one or more Renderable components to the collection.
      *
      * @param array|Renderable $vue
@@ -32,17 +49,14 @@ class VueCollection implements Renderable
      */
     public function add($vue)
     {
-        if (is_array($vue)) {
-            foreach ($vue as $component) {
-                $this->add($component);
-            }
-        } else {
-            if (! $vue instanceof Renderable) {
-                throw new \Exception("This object cannot be added to this collection. Make sure it implements the Renderable Interface.");
-            }
-    
-            $this->items[] = $vue;
-        }
+        // Wrap a single component in an array.
+        $vue = is_array($vue) ? $vue : [$vue];
+
+        array_walk($vue, function($item) {
+            $this->guard($item);
+            
+            $this->items[] = $item;
+        });
 
         return $this;
     }
@@ -54,13 +68,8 @@ class VueCollection implements Renderable
      */
     public function render()
     {
-        $output = '';
-
-        foreach ($this->items as $renderable)
-        {
-            $output .= $renderable->render();
-        }
-
-        return $output;
+        return array_reduce($this->items, function($output, $vue) {
+            return $output .= $vue->render();
+        });
     }
 }
