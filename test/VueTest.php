@@ -127,4 +127,40 @@ class VueTest extends TestCase
 
         $this->assertEquals("<v-nav><v-link href='/home'>Home</v-link><v-link href='/about'>About</v-link></v-nav>", $vue->render());
     }
+
+    public function test_the_construct_method_can_be_nested_and_display_complex_structures_correctly()
+    {
+        $nav = [
+            'tag' => 'v-nav',
+            'slot' => [
+                [
+                    'tag' => 'v-nav-item',
+                    'href' => '/home',
+                    'slot' => 'Home',
+                ],
+                [
+                    'tag' => 'v-nav-item',
+                    'href' => '/about',
+                    'slot' => 'About'
+                ],
+                [
+                    'tag' => 'v-social-container',
+                    'slot' => [
+                        [
+                            'tag' => 'v-social-item',
+                            'new-tab' => true,
+                            'slot' => 'GitHub'
+                        ],
+                        [
+                            'tag' => 'v-social-item',
+                            'new-tab' => true,
+                            'slot' => 'Twitter'
+                        ],
+                    ]
+                ]
+            ]
+        ];
+
+        $this->assertEquals("<v-nav><v-nav-item href='/home'>Home</v-nav-item><v-nav-item href='/about'>About</v-nav-item><v-social-container><v-social-item v-bind:new-tab='true'>GitHub</v-social-item><v-social-item v-bind:new-tab='true'>Twitter</v-social-item></v-social-container></v-nav>", Vue::construct($nav)->render());
+    }
 }
