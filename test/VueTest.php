@@ -76,4 +76,55 @@ class VueTest extends TestCase
 
         $this->assertEquals("<v-outer><v-inner v-bind:inside='true'></v-inner></v-outer>", $vue->render());
     }
+
+    public function test_it_converts_an_array_to_a_vue_collection_when_set_as_a_slot()
+    {
+        $vue = Vue::make('v-outer')->setSlot([
+            Vue::make('v-inner')
+        ]);
+
+        $this->assertEquals("<v-outer><v-inner></v-inner></v-outer>", $vue->render());
+    }
+
+    public function test_it_accepts_an_array_of_props_as_a_second_argument()
+    {
+        $vue = Vue::make('v-link', [
+            'href' => 'https://www.example.com'
+        ]);
+
+        $this->assertEquals("<v-link href='https://www.example.com'></v-link>", $vue->render());
+    }
+
+    public function test_it_sets_the_slot_when_the_prop_name_is_slot()
+    {
+        $vue = Vue::make('v-link', [
+            'href' => 'https://www.example.com',
+            'slot' => 'Home'
+        ]);
+
+        $this->assertEquals("<v-link href='https://www.example.com'>Home</v-link>", $vue->render());
+    }
+
+    public function test_it_can_construct_a_instance_from_an_array_structure()
+    {
+        $nav = [
+            'tag' => 'v-nav',
+            'slot' => [
+                [
+                    'tag' => 'v-link',
+                    'href' => '/home',
+                    'slot' => 'Home',
+                ],
+                [
+                    'tag' => 'v-link',
+                    'href' => '/about',
+                    'slot' => 'About'
+                ]
+            ]
+        ];
+
+        $vue = Vue::construct($nav);
+
+        $this->assertEquals("<v-nav><v-link href='/home'>Home</v-link><v-link href='/about'>About</v-link></v-nav>", $vue->render());
+    }
 }

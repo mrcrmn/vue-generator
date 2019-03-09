@@ -41,9 +41,10 @@ class HtmlTag implements Renderable
      *
      * @param string $tag The tag name.
      */
-    public function __construct($tag)
+    public function __construct($tag, $attributes = [])
     {
         $this->tag = $tag;
+        $this->setAttribute($attributes);
     }
 
     /**
@@ -195,7 +196,11 @@ class HtmlTag implements Renderable
 
         if ($boolean) {
             array_walk($attribute, function($value, $key) {
-                $this->attributes[$key] = $value;
+                if ($key === 'slot') {
+                    $this->setSlot($value);
+                } else {
+                    $this->attributes[$key] = $value;
+                }
             });
         }
 
@@ -205,12 +210,12 @@ class HtmlTag implements Renderable
     /**
      * The the tags content aka. slot.
      *
-     * @param string $slot
+     * @param string|array|Renderable $slot
      * @return $this
      */
-    public function setSlot($slot = '')
+    public function setSlot($slot)
     {
-        $this->slot = $slot;
+        $this->slot = is_array($slot) ? new VueCollection($slot) : $slot;
 
         return $this;
     }

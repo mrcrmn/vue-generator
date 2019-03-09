@@ -33,7 +33,7 @@ class Vue extends HtmlTag implements Renderable
     /**
      * Checks if we need to add 'v-bind:' before the prop declaration.
      * 
-     * This only applies to string.
+     * This only doesn't apply to strings.
      *
      * @param mixed $value
      * @return boolean
@@ -64,5 +64,35 @@ class Vue extends HtmlTag implements Renderable
         }
 
         return $value;
+    }
+
+
+    /**
+     * Dynamically constructs HtmlTag Objects with an data object as input.
+     *
+     * @param $array
+     * @return void
+     */
+    public static function construct($array)
+    {
+        $collection = new VueCollection();
+
+        $array = array_key_exists('tag', $array) ? [$array] : $array;
+
+        foreach ($array as $item) {
+            $tagName = $item['tag'];
+            $slot = $item['slot'];
+
+            unset($item['tag']);
+            unset($item['slot']);
+    
+            $tag = new static($tagName);
+            $tag->setAttribute($item);
+            $tag->setSlot(is_array($slot) ? static::construct($slot) : $slot);
+
+            $collection->add($tag);
+        }
+
+        return $collection;
     }
 }
