@@ -38,4 +38,4 @@ $ composer require mrcrmn/vue-generator
 ```
 
 ## Docs
-For the docs visit (https://mrcrmn.github.io/packages/vue-generator/)
+For the docs visit https://mrcrmn.netlify.com/packages/vue-generator/
