@@ -1,6 +1,6 @@
 # Vue Generator
 
-<img src="https://mrcrmn.github.io/vue-generator_logo.png" width="200">
+<img src="https://mrcrmn.netlify.com/vue-generator_logo.png" width="200">
 
 Clean up your PHP templates and create simple data objects to render your Vue components and its props.
 
